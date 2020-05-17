@@ -1,6 +1,7 @@
 import json
 import requests
 from flask import Flask
+from BasePost import BasePost
 
 app = Flask(__name__)
 
@@ -30,7 +31,7 @@ def get_id(user_id):
 
     return response
 
-@app.route('/posts-by-userId/<user_Id>')
+@app.route('/posts/userId/<user_Id>')
 def get_user_id(user_Id):
 
     id_response = requests.get('https://jsonplaceholder.typicode.com/posts/?userId='+user_Id)
@@ -54,6 +55,16 @@ def get_user_comments(user_Id):
             status=200,
             mimetype='application/json')
 
+    return response
+
+@app.route("/mypost")
+def summary():
+    data = BasePost(1, 1, 'hello', 'all my friend')
+    response = app.response_class(
+        response=json.dumps(data.__dict__),
+        status=200,
+        mimetype='application/json'
+        )
     return response
 
 if __name__ == "__main__":
