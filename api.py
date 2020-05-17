@@ -1,71 +1,73 @@
 import json
 import requests
 from flask import Flask
-from BasePost import BasePost
+from JsonablePost import JsonablePost
 
 app = Flask(__name__)
 
+
 @app.route('/posts/')
 def get_blog_posts():
-
     posts_response = requests.get('https://jsonplaceholder.typicode.com/posts/')
     posts = posts_response.json()
     response = app.response_class(
 
-            response=json.dumps(posts),
-            status=200,
-            mimetype='application/json')
+        response=json.dumps(posts),
+        status=200,
+        mimetype='application/json')
 
     return response
 
+
 @app.route('/posts/<user_id>')
 def get_id(user_id):
-
     id_response = requests.get('https://jsonplaceholder.typicode.com/posts/' + user_id)
     id = id_response.json()
     response = app.response_class(
 
-            response=json.dumps(id),
-            status=200,
-            mimetype='application/json')
+        response=json.dumps(id),
+        status=200,
+        mimetype='application/json')
 
     return response
+
 
 @app.route('/posts/userId/<user_Id>')
 def get_user_id(user_Id):
-
-    id_response = requests.get('https://jsonplaceholder.typicode.com/posts/?userId='+user_Id)
+    id_response = requests.get('https://jsonplaceholder.typicode.com/posts/?userId=' + user_Id)
     id = id_response.json()
     response = app.response_class(
 
-            response=json.dumps(id),
-            status=200,
-            mimetype='application/json')
+        response=json.dumps(id),
+        status=200,
+        mimetype='application/json')
 
     return response
+
 
 @app.route('/posts/<user_Id>/comments')
 def get_user_comments(user_Id):
-
-    comments_response = requests.get('https://jsonplaceholder.typicode.com/posts/'+user_Id+"/comments")
+    comments_response = requests.get('https://jsonplaceholder.typicode.com/posts/' + user_Id + "/comments")
     comments = comments_response.json()
     response = app.response_class(
 
-            response=json.dumps(comments),
-            status=200,
-            mimetype='application/json')
+        response=json.dumps(comments),
+        status=200,
+        mimetype='application/json')
 
     return response
+
 
 @app.route("/mypost")
-def summary():
-    data = BasePost(1, 1, 'hello', 'all my friend')
+def mypost():
+    data = JsonablePost(1, 1, 'hello', 'all my friend')
     response = app.response_class(
-        response=json.dumps(data.__dict__),
+        response=json.dumps(data.to_json()),
         status=200,
         mimetype='application/json'
-        )
+    )
     return response
+
 
 if __name__ == "__main__":
     app.run()
